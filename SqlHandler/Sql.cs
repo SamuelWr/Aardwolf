@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SqlHandler
 {
-    public class Sql
+    public static class Sql
     {
+        private const string ConStr = "something here";
     }
 }
