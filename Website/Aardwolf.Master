@@ -12,7 +12,7 @@
     <form id="form1" runat="server">
     <div>
         <asp:ContentPlaceHolder ID="main" runat="server">
-        
+            <asp:Literal ID="content" runat="server"></asp:Literal>
         </asp:ContentPlaceHolder>
     </div>
     </form>
