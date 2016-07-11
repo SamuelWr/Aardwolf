@@ -3,6 +3,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="server">
+
+    <%--TODO: Centrera loginformet vertikalt. Gör den responsiv i md-läge--%>
+
     <div class="container">
         <div class="row vertical-center">
             <div class="col-sm-6 col-md-4 col-md-offset-4">
