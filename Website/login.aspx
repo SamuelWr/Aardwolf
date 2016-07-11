@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="server">
     <div class="container">
-        <div class="row">
+        <div class="row vertical-center">
             <div class="col-sm-6 col-md-4 col-md-offset-4">
                 <h1 class="text-center login-title">Sign in to continue shopping</h1>
                 <div class="account-wall">
