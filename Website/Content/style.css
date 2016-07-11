@@ -73,23 +73,29 @@
     background-color: white;
 }
 
-.products {
-    margin-top: 40px;
+.product {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+
+/*.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}*/
 
 /*.vertical-center {
     min-height: 100%;  Fallback for browsers do NOT support vh unit 
     min-height: 100vh;  These two lines are counted as one :-)       
     display: flex;
     align-items: center;
+    position: relative;
 }*/
 
-.navbar 
-{
+.navbar {
     margin-bottom: 0px;
 }
 
-.glyphicon
-{
+.glyphicon {
     margin-right: 10px;
 }
