@@ -8,6 +8,7 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/style.css" rel="stylesheet" />
     <script src="scripts/jquery-1.9.1.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
 </head>
@@ -20,8 +21,8 @@
                 </div>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.aspx">Home</a></li>
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
+                  <%--  <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li>--%>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="register.aspx"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
