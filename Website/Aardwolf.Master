@@ -20,18 +20,28 @@
                     <a class="navbar-brand" href="index.aspx">Aardwolf.com</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.aspx">Home</a></li>
-                  <%--  <li><a href="#">Page 1</a></li>
+                    <li><a href="index.aspx">Home</a></li>
+                    <%--  <li><a href="#">Page 1</a></li>
                     <li><a href="#">Page 2</a></li>--%>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="register.aspx"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
-                    <li><a href="login.aspx"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+                    <li><a href="login.aspx"><span class="glyphicon glyphicon-user"></span>My account</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span>Basket</a></li>
                 </ul>
             </div>
         </nav>
         <asp:ContentPlaceHolder ID="main" runat="server">
         </asp:ContentPlaceHolder>
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <p class="navbar-text pull-left">
+                © 2014 - Site Built By Aardwolf Team
+            </p>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="navbar-btn btn-danger btn pull-right">
+                <span class="glyphicon glyphicon-star"></span>Check out our awesome YouTube channel</a>
+        </div>
     </div>
 </body>
 </html>
