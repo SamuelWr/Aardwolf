@@ -40,14 +40,13 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="login.aspx"><span class="glyphicon glyphicon-user"></span>My account</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span>Basket</a></li>
+                    <li><a href="Basket.aspx"><span class="glyphicon glyphicon-shopping-cart"></span>Basket</a></li>
                 </ul>
             </div>
         </nav>
         <asp:ContentPlaceHolder ID="main" runat="server">
         </asp:ContentPlaceHolder>
     </div>
-
     <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <p class="navbar-text pull-left">

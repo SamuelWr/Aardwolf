@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SqlHandler;
+//using SqlHandler;
 
 namespace Aardwolf
 {
@@ -11,8 +11,8 @@ namespace Aardwolf
     {
         static void Main(string[] args)
         {
-            string users = Sql.GetUsers();
-            Console.WriteLine(users);
+           // string users = Sql.GetUsers();
+           // Console.WriteLine(users);
         }
     }
 }
