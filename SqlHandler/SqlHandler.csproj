@@ -43,6 +43,12 @@
     <Compile Include="Sql.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aardwolf\Aardwolf.csproj">
+      <Project>{3c2e7c1a-dcc4-4171-8845-c47f48a4aa5d}</Project>
+      <Name>Aardwolf</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

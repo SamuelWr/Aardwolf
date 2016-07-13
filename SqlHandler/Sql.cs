@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using Aardwolf;
 
 namespace SqlHandler
 {
@@ -57,26 +58,26 @@ namespace SqlHandler
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static int LogIn(string username, string password)
+        public static User LogIn(string username, string password)
         {
-            int userId=-1;
+            User user = null;
             //Todo: get password hash and salt from database
 
             //Todo: hash from input password.
 
             //Todo: compare and return
-            return userId;
+            return user;
         }
         /// <summary>
-        /// Creates a new user, returns userId if successful -1 else
+        /// Creates a new user, returns user object if successful else null
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="Password"></param>
         /// <param name="isAdmin"></param>
         /// <returns></returns>
-        public static int CreateUser(string userName, string Password, bool isAdmin)
+        public static User CreateUser(string userName, string Password, bool isAdmin)
         {
-            int userId = -1;
+            User user = null;
             //Todo: check that username does not already exist.
 
             char[] salt = new char[lengthOfSalt];
@@ -92,22 +93,50 @@ namespace SqlHandler
 
             bool success = false;
 
-            return userId;
+            return user;
+        }
+        /// <summary>
+        /// Takes a User object referring to a already existing user, makes required changes in database
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>A bool indicating if the changes succeeded.</returns>
+        public static bool UpdateUser(User user)
+        {
+            bool success = false;
+
+            return success;
         }
         /// <summary>
         /// returns list of all products
         /// </summary>
-        public static void GetProducts()
+        public static List<Product> GetProducts()
         {
             //return list of products;
+            List<Product> products = null;
+
+            return products;
         }
         /// <summary>
         /// returns list of all products matching search string
         /// </summary>
         /// <param name="searchString"></param>
-        public static void SearchProducts(string searchString)
+        public static List<Product> SearchProducts(string searchString)
         {
+            List<Product> products = null;
             // retrurn list of products
+            return products;
+        }
+
+        public static User GetUser(int UserID)
+        {
+            User user = null;
+
+            return user;
+        }
+        public static User GetUser(string UserName)
+        {
+            User user = null;
+            return user;
         }
     }
 }
