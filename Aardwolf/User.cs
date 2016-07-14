@@ -8,7 +8,7 @@ namespace Aardwolf
 {
     public class User
     {
-        public int UserId { get; }
+        public int UserId { get; set; }
         public string UserName { get; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

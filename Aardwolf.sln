@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlHandler", "SqlHandler\Sq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{CD37336C-5266-412F-9C0D-5E5B3B773B0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{9F8D651F-70F0-4A5B-8180-CB637D559162}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CD37336C-5266-412F-9C0D-5E5B3B773B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD37336C-5266-412F-9C0D-5E5B3B773B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD37336C-5266-412F-9C0D-5E5B3B773B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8D651F-70F0-4A5B-8180-CB637D559162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8D651F-70F0-4A5B-8180-CB637D559162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8D651F-70F0-4A5B-8180-CB637D559162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8D651F-70F0-4A5B-8180-CB637D559162}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

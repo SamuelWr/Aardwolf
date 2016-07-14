@@ -35,9 +35,17 @@ namespace SqlHandler
                 SqlDataReader myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
                 {
-                    users += "NAME: " + myReader["username"].ToString()  + Environment.NewLine;
-                    
-                    
+                    if (!(myReader["username"] is System.DBNull))
+                        users += "NAME: " + (string)myReader["username"];
+                    if (!(myReader["firstname"] is System.DBNull))
+                        users += "\tFirstname = " + (string)myReader["firstname"];
+                    if (!(myReader["lastname"] is System.DBNull))
+                        users += "\tLastname = " + (string)myReader["lastname"];
+                    if (!(myReader["email"] is System.DBNull))
+                        users += "\tEmail = " + (string)myReader["email"];
+                    if (!(myReader["address"] is System.DBNull))
+                        users += "\tAddress = " + (string)myReader["address"];
+                    users += Environment.NewLine;
                 }
             }
             catch (Exception ex)
@@ -53,19 +61,20 @@ namespace SqlHandler
             return users;
         }
         /// <summary>
-        /// Attempts to log in user, returns userId if successful else -1
+        /// Attempts to log in user, returns User object if successfull, else null.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
         public static User LogIn(string username, string password)
         {
+            throw new NotImplementedException();
             User user = null;
-            //Todo: get password hash and salt from database
+            //get password hash and salt from database
 
-            //Todo: hash from input password.
+            //hash from input password.
 
-            //Todo: compare and return
+            //compare and return
             return user;
         }
         /// <summary>
@@ -77,8 +86,9 @@ namespace SqlHandler
         /// <returns></returns>
         public static User CreateUser(string userName, string Password, bool isAdmin)
         {
+            throw new NotImplementedException();
             User user = null;
-            //Todo: check that username does not already exist.
+            //check that username does not already exist.
 
             char[] salt = new char[lengthOfSalt];
             for (int i = 0; i < lengthOfSalt; i++)
@@ -102,6 +112,8 @@ namespace SqlHandler
         /// <returns>A bool indicating if the changes succeeded.</returns>
         public static bool UpdateUser(User user)
         {
+            throw new NotImplementedException();
+            //Require password too?
             bool success = false;
 
             return success;
@@ -111,8 +123,43 @@ namespace SqlHandler
         /// </summary>
         public static List<Product> GetProducts()
         {
-            //return list of products;
-            List<Product> products = null;
+            //Todo: test GetProducts()
+            List<Product> products = new List<Product>();
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand("select * from Products", myConnection);
+
+            try
+            {
+                myConnection.Open();
+
+                SqlDataReader myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+                    var product = new Product();
+                    if (!(myReader["ID"] is System.DBNull))
+                        product.ProductId = (int)myReader["ID"];
+                    if (!(myReader["ProductName"] is System.DBNull))
+                        product.ProductName = (string)myReader["ProductName"];
+                    if (!(myReader["PictureUrl"] is System.DBNull))
+                        product.PictureUrl = (string)myReader["PictureUrl"];
+                    if (!(myReader["ThumbnailPictureUrl"] is System.DBNull))
+                        product.ThumbnailPictureUrl = (string)myReader["ThumbnailPictureUrl"];
+                    if (!(myReader["Cost"] is System.DBNull))
+                        product.Cost = (double)myReader["Cost"];
+
+                    products.Add(product);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
 
             return products;
         }
@@ -122,6 +169,8 @@ namespace SqlHandler
         /// <param name="searchString"></param>
         public static List<Product> SearchProducts(string searchString)
         {
+            throw new NotImplementedException();
+            //write SearchProducts(), might be difficult to make a stored procedure. search locally instead?
             List<Product> products = null;
             // retrurn list of products
             return products;
@@ -131,12 +180,176 @@ namespace SqlHandler
         {
             User user = null;
 
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand($"select * from Users WHERE ID = {UserID}", myConnection);
+
+            try
+            {
+                myConnection.Open();
+
+                SqlDataReader myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+                    string username = "";
+                    if (!(myReader["username"] is System.DBNull))
+                        username = (string)myReader["username"];
+                    user = new User(username);
+
+                    if (!(myReader["firstname"] is System.DBNull))
+                        user.FirstName = (string)myReader["firstname"];
+                    if (!(myReader["lastname"] is System.DBNull))
+                        user.LastName = (string)myReader["lastname"];
+                    if (!(myReader["email"] is System.DBNull))
+                        user.EmailAddress = (string)myReader["email"];
+                    if (!(myReader["Address"] is System.DBNull))
+                        user.DeliveryAddress = (string)myReader["Address"];
+                    user.UserId = UserID;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+            if (user != null)
+            {
+                user.Orders = GetOrders(UserID);
+            }
+
             return user;
         }
         public static User GetUser(string UserName)
         {
+            //Todo: Change to stored procedure for security
             User user = null;
+            int UserID = -1;
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand($"select * from Users WHERE username = '{UserName}'", myConnection);
+
+            try
+            {
+                myConnection.Open();
+
+                SqlDataReader myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+                    string username = "";
+                    if (!(myReader["username"] is System.DBNull))
+                        username = (string)myReader["username"];
+                    user = new User(username);
+
+                    if (!(myReader["firstname"] is System.DBNull))
+                        user.FirstName = (string)myReader["firstname"];
+                    if (!(myReader["lastname"] is System.DBNull))
+                        user.LastName = (string)myReader["lastname"];
+                    if (!(myReader["email"] is System.DBNull))
+                        user.EmailAddress = (string)myReader["email"];
+                    if (!(myReader["Address"] is System.DBNull))
+                        user.DeliveryAddress = (string)myReader["Address"];
+
+                    if (!(myReader["ID"] is System.DBNull))
+                        UserID = (int)(myReader["ID"]);
+                    user.UserId = UserID;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+            if (user != null)
+            {
+                user.Orders = GetOrders(UserID);
+            }
+
+
             return user;
+        }
+        private static List<Order> GetOrders(int UserID)
+        {
+            var orders = new List<Order>();
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand($"select * from Orders WHERE CustomerID = {UserID}", myConnection);
+
+            try
+            {
+                myConnection.Open();
+
+                SqlDataReader myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+                    var order = new Order();
+
+                    if (!(myReader["ID"] is System.DBNull))
+                        order.ID = (int)myReader["ID"];
+                    if (!(myReader["DeliveryAddress"] is System.DBNull))
+                        order.DeliveryAddress = (string)myReader["DeliveryAddress"];
+                    if (!(myReader["HasBeenDelivered"] is System.DBNull))
+                        order.HasBeenDelivered = (bool)myReader["HasBeenDelivered"];// == 1 ? true : false;
+
+                    orders.Add(order);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+            foreach (var order in orders)
+            {
+                order.Items = GetOrderItems(order.ID);
+            }
+
+            return orders;
+        }
+
+        private static List<OrderItem> GetOrderItems(int OrderID)
+        {
+            var items = new List<OrderItem>();
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand($"select * from OrderItems WHERE OrderID = {OrderID}", myConnection);
+
+            try
+            {
+                myConnection.Open();
+
+                SqlDataReader myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+                    decimal Cost = -1;
+                    int productId = -1;
+                    if (!(myReader["Cost"] is System.DBNull))
+                        Cost = (decimal)myReader["Cost"];
+                    if (!(myReader["ProductID"] is System.DBNull))
+                        productId = (int)myReader["ProductID"];
+                    var item = new OrderItem(productId, Cost);
+
+
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+            return items;
         }
     }
 }

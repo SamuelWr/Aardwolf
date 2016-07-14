@@ -9,7 +9,7 @@ namespace Aardwolf
     public class Order
     {
         public string DeliveryAddress { get; set; }
-        public double TotalCost
+        public decimal TotalCost
         {
             get
             {
@@ -21,8 +21,9 @@ namespace Aardwolf
 
         }
         public bool HasBeenDelivered { get; set; }
+        public int ID { get; set; }
 
-        List<OrderItem> Items = new List<OrderItem>();
+        public List<OrderItem> Items = new List<OrderItem>();
 
         //internal to database, shown only for completeness.
         private int CustomerId;

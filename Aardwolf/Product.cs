@@ -8,11 +8,11 @@ namespace Aardwolf
 {
     public class Product
     {
-        public int ProductId { get; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string PictureUrl { get; set; }
         public string ThumbnailPictureUrl { get; set; }
         public double Cost { get; set; }
-
+        
     }
 }

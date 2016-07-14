@@ -9,9 +9,15 @@ namespace Aardwolf
     public class OrderItem
     {
         public int ProductId { get; }
-        public double Cost { get; set; }
+        public decimal Cost { get;  }
 
         //internal to database, shown only for completeness.
         private int OrderID;
+
+        public OrderItem(int productId, decimal Cost)
+        {
+            this.ProductId = productId;
+            this.Cost = Cost;
+        }
     }
 }
