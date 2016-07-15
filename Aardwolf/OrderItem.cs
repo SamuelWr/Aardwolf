@@ -19,5 +19,11 @@ namespace Aardwolf
             this.ProductId = productId;
             this.Cost = Cost;
         }
+
+        public OrderItem(Product product)
+        {
+            this.ProductId = product.ProductId;
+            this.Cost = product.Cost;
+        }
     }
 }

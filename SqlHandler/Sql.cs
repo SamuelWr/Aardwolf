@@ -12,13 +12,170 @@ namespace SqlHandler
     public static class Sql
     {
         private const string CON_STR = "Data Source=localhost;Initial Catalog=Aardwolf;Integrated Security=SSPI";
+
+        public static void AddProduct(string ProductName, string Description, string PictureUrl, string ThumbnailUrl, decimal cost)
+        {
+            //Todo: change to storedprocedure to avoid Sql injections.
+            //Less critical since only admins get to use it.
+            //But still good, to handle Nintendo naming their next pokemon Bobby Tables. (robert' drop table users --)
+            string commandString = "INSERT into Products "
+                              + "(ProductName, Description, PictureUrl, ThumbnailPictureUrl, Cost) "
+                              + "values "
+                              + $"('{ProductName}', '{Description}', '{PictureUrl}', '{ThumbnailUrl}', {cost}) ";
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand(commandString, myConnection);
+
+            try
+            {
+                myConnection.Open();
+                var rowsAffected = myCommand.ExecuteNonQuery();
+
+                if (rowsAffected != 1)
+                    throw new ApplicationException("failed to insert orderItem into database");
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+        }
+
         private static Random random = new Random();
         private const int lengthOfSalt = 10;
 
-        public static void MakeOrder(User user, List<Product> orderItems)
+        public static void DeleteOrder(int UserId, int OrderId)
         {
-            throw new NotImplementedException();
+            //We only really need OrderId, but having UserId for errorchecking is nice.
+            var commandString = $"SELECT * from Orders WHERE ID = {OrderId} AND CustomerID = {UserId}";
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand(commandString, myConnection);
+
+            try
+            {
+                //check order exists
+                myConnection.Open();
+                var myReader = myCommand.ExecuteReader();
+                if (myReader.Read())
+                {
+                    //Good there exists such an order
+                }
+                else
+                {
+                    //order does not exist, end delete.
+                    return;
+                }
+                myConnection.Close();
+                //delete order items
+                commandString = $"DELETE from OrderItems WHERE OrderID = {OrderId}";
+                myConnection = new SqlConnection(CON_STR);
+                myCommand = new SqlCommand(commandString, myConnection);
+                myConnection.Open();
+                int rowsAffected = myCommand.ExecuteNonQuery();
+                myConnection.Close();
+                //delete order
+                commandString = $"DELETE from Orders WHERE ID = {OrderId} AND CustomerID = {UserId}";
+                myConnection = new SqlConnection(CON_STR);
+                myCommand = new SqlCommand(commandString, myConnection);
+                myConnection.Open();
+                rowsAffected = myCommand.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+
         }
+
+        public static void MakeOrder(int userId, string deliveryAddress, List<OrderItem> orderItems)
+        {
+            //Add order
+            int orderId = -1;
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            try
+            {
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                myCommand.CommandText = "insertorder";
+
+                SqlParameter paramUserId = new SqlParameter("@customerid", System.Data.SqlDbType.Int);
+                paramUserId.Value = userId;
+                myCommand.Parameters.Add(paramUserId);
+
+
+                SqlParameter paramAddress = new SqlParameter("@address", System.Data.SqlDbType.VarChar);
+                paramAddress.Size = 8000;
+                paramAddress.Value = deliveryAddress;
+                myCommand.Parameters.Add(paramAddress);
+
+
+                SqlParameter paramOrderId = new SqlParameter("@orderid", System.Data.SqlDbType.Int);
+                paramOrderId.Direction = System.Data.ParameterDirection.Output;
+                myCommand.Parameters.Add(paramOrderId);
+
+                myConnection.Open();
+                int numberofrows = myCommand.ExecuteNonQuery();
+                orderId = (int)paramOrderId.Value;
+
+                //Console.WriteLine($"Added {numberofrows} rows.");
+
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+            //add items to order
+            if (orderId != -1)
+                foreach (var item in orderItems)
+                {
+                    AddOrderItem(orderId, item);
+                }
+        }
+
+        private static void AddOrderItem(int orderId, OrderItem item)
+        {
+            //Hack: dividing cost by 10000 to make conversion from string to Sql.Money work.
+            //stored procedure would probably be better
+            var commandString = $"insert into OrderItems (OrderID,ProductID,Cost) values ({orderId},{item.ProductId},'{item.Cost / 10000}')";
+
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+            SqlCommand myCommand = new SqlCommand(commandString, myConnection);
+
+            try
+            {
+                myConnection.Open();
+                var rowsAffected = myCommand.ExecuteNonQuery();
+
+                if (rowsAffected != 1)
+                    throw new ApplicationException("failed to insert orderItem into database");
+            }
+            catch (Exception ex)
+            {
+                //Response.Write($"<script>alert('{ex.Message}');</script>");
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+        }
+
         /// <summary>
         /// For testing only, liable to be removed without warning.
         /// </summary>
@@ -72,7 +229,10 @@ namespace SqlHandler
         /// <returns></returns>
         public static int LogIn(string username, string password)
         {
-            //throw new NotImplementedException();
+            //TODO: I might have a security issue here if someone crashes the database at just the right moment.
+            // then stored hash and salt is empty string.
+            //and input password might be manipulated to return empty string too.
+            //          move into try clause and return -1 if any excepton occurs to fix?
             int userId = -1;
             string hash = "", salt = "";
             //get password hash and salt from database
@@ -139,6 +299,7 @@ namespace SqlHandler
 
         private static string ComputeHash(string password, string salt)
         {
+            //Todo: only thing left to get secure log ins (I hope...)
             return "HashHere";
 
             throw new NotImplementedException();
@@ -167,7 +328,7 @@ namespace SqlHandler
 
             //Insert user in database
             var user = new User(userName);
-            user.UserId = InsertUserInDatabase(userName, hash, salt);
+            user.UserId = InsertUserInDatabase(userName, isAdmin, hash, salt);
 
             //return user if insert completed.
             if (user.UserId > 0)
@@ -182,7 +343,7 @@ namespace SqlHandler
         /// <param name="hash">Computed password hash</param>
         /// <param name="salt">password salt</param>
         /// <returns>UserId of new user, -1 if failed.</returns>
-        private static int InsertUserInDatabase(string userName, string hash, string salt)
+        private static int InsertUserInDatabase(string userName,bool isAdmin, string hash, string salt)
         {
             int userId = -1;
             SqlConnection myConnection = new SqlConnection(CON_STR);
@@ -212,6 +373,13 @@ namespace SqlHandler
                 paramSalt.Value = salt;
                 paramSalt.Size = 20;
                 myCommand.Parameters.Add(paramSalt);
+
+                SqlParameter paramIsAdmin = new SqlParameter("@isadmin", System.Data.SqlDbType.Bit);
+                //paramSalt.Direction = System.Data.ParameterDirection.Output;
+                paramIsAdmin.Value = isAdmin;
+                //paramSalt.Size = 20;
+                myCommand.Parameters.Add(paramIsAdmin);
+
 
                 SqlParameter paramUserId = new SqlParameter("@userid", System.Data.SqlDbType.Int);
                 paramUserId.Direction = System.Data.ParameterDirection.Output;
@@ -255,8 +423,8 @@ namespace SqlHandler
                 SqlCommand myCommand = new SqlCommand();
                 myCommand.Connection = myConnection;
                 myCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                myCommand.CommandText = "updateuser";                
-                
+                myCommand.CommandText = "updateuser";
+
                 SqlParameter paramFirstName = new SqlParameter("@firstname", System.Data.SqlDbType.VarChar);
                 paramFirstName.Value = user.FirstName;
                 paramFirstName.Size = 100;
@@ -293,7 +461,7 @@ namespace SqlHandler
             {
                 myConnection.Close();
             }
-            
+
             return success;
         }
         /// <summary>
