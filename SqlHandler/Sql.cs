@@ -61,21 +61,76 @@ namespace SqlHandler
             return users;
         }
         /// <summary>
-        /// Attempts to log in user, returns User object if successfull, else null.
+        /// Attempts to log in user, returns User Id if successful, else -1.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static User LogIn(string username, string password)
+        public static int LogIn(string username, string password)
         {
-            throw new NotImplementedException();
-            User user = null;
+            //throw new NotImplementedException();
+            int userId = -1;
+            string hash = "", salt = "";
             //get password hash and salt from database
+            SqlConnection myConnection = new SqlConnection(CON_STR);
 
-            //hash from input password.
+            try
+            {
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                myCommand.CommandText = "getpwdetails";
 
+                SqlParameter paramUserName = new SqlParameter("@username", System.Data.SqlDbType.VarChar);
+                paramUserName.Value = username;
+                paramUserName.Size = 100;
+                myCommand.Parameters.Add(paramUserName);
+
+
+
+                SqlParameter paramHash = new SqlParameter("@pwhash", System.Data.SqlDbType.VarChar);
+                paramHash.Direction = System.Data.ParameterDirection.Output;
+                paramHash.Size = 100;
+                myCommand.Parameters.Add(paramHash);
+
+                SqlParameter paramSalt = new SqlParameter("@pwsalt", System.Data.SqlDbType.VarChar);
+                paramSalt.Direction = System.Data.ParameterDirection.Output;
+                paramSalt.Size = 20;
+                myCommand.Parameters.Add(paramSalt);
+
+                SqlParameter paramUserId = new SqlParameter("@userid", System.Data.SqlDbType.Int);
+                paramUserId.Direction = System.Data.ParameterDirection.Output;
+                myCommand.Parameters.Add(paramUserId);
+
+                myConnection.Open();
+                int numberofrows = myCommand.ExecuteNonQuery();
+
+                //Console.WriteLine($"Added {numberofrows} rows.");
+
+                salt = (string)paramSalt.Value;
+                hash = (string)paramHash.Value;
+                userId = (int)paramUserId.Value;
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+            Console.WriteLine($"Hash: {hash}");
+            Console.WriteLine($"Salt: {salt}");
+            Console.WriteLine($"UserId: {userId}");
+
+            //Todo: compute hash from input password.
+            string ComputedHash = "";
             //compare and return
-            return user;
+            if (ComputedHash.Equals(hash))
+                return userId;
+            else
+                return -1;
         }
         /// <summary>
         /// Creates a new user, returns user object if successful else null
@@ -96,7 +151,7 @@ namespace SqlHandler
                 salt[i] = (char)random.Next(65, 91);
             }
             var md5 = new System.Security.Cryptography.MD5Cng();
-            //md5.ComputeHash(Password);
+            //md5.ComputeHash(salt + Password + salt);
             //md5.ComputeHash()
 
 
@@ -223,7 +278,12 @@ namespace SqlHandler
 
             return user;
         }
-        public static User GetUser(string UserName)
+        /// <summary>
+        /// Deprecated, saved for posterity. (Delete when I am sure it is not needed.)
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <returns></returns>
+        private static User GetUser(string UserName)
         {
             //Todo: Change to stored procedure for security
             User user = null;
