@@ -141,6 +141,8 @@ namespace SqlHandler
                         product.ProductId = (int)myReader["ID"];
                     if (!(myReader["ProductName"] is System.DBNull))
                         product.ProductName = (string)myReader["ProductName"];
+                    if (!(myReader["Description"] is System.DBNull))
+                        product.Description = (string)myReader["Description"];
                     if (!(myReader["PictureUrl"] is System.DBNull))
                         product.PictureUrl = (string)myReader["PictureUrl"];
                     if (!(myReader["ThumbnailPictureUrl"] is System.DBNull))
