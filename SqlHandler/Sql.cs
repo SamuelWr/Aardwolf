@@ -15,6 +15,10 @@ namespace SqlHandler
         private static Random random = new Random();
         private const int lengthOfSalt = 10;
 
+        public static void MakeOrder(User user, List<Product> orderItems)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// For testing only, liable to be removed without warning.
         /// </summary>
@@ -107,8 +111,118 @@ namespace SqlHandler
 
                 //Console.WriteLine($"Added {numberofrows} rows.");
 
-                salt = (string)paramSalt.Value;
-                hash = (string)paramHash.Value;
+                //salt = (string)paramSalt.Value;
+                //hash = (string)paramHash.Value;
+                //userId = (int)paramUserId.Value;
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+
+            //Console.WriteLine($"Hash: {hash}");
+            //Console.WriteLine($"Salt: {salt}");
+            //Console.WriteLine($"UserId: {userId}");
+
+            //compute hash from input password.
+            string ComputedHash = ComputeHash(password, salt);
+            //compare and return
+            if (hash.Equals(ComputedHash))
+                return userId;
+            else
+                return -1;
+        }
+
+        private static string ComputeHash(string password, string salt)
+        {
+            return "HashHere";
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates a new user, returns user object if successful else null
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="Password"></param>
+        /// <param name="isAdmin"></param>
+        /// <returns>User object representing the new user.</returns>
+        public static User CreateUser(string userName, string Password, bool isAdmin)
+        {
+            //todo: check that username does not already exist.
+
+            //compute hash
+            char[] saltArray = new char[lengthOfSalt];
+            for (int i = 0; i < lengthOfSalt; i++)
+            {
+                saltArray[i] = (char)random.Next(65, 91);
+            }
+            var salt = new string(saltArray);
+
+            string hash = ComputeHash(Password, salt);
+
+            //Insert user in database
+            var user = new User(userName);
+            user.UserId = InsertUserInDatabase(userName, hash, salt);
+
+            //return user if insert completed.
+            if (user.UserId > 0)
+                return user;
+            else
+                return null;
+        }
+        /// <summary>
+        /// Creates a new user in database with supplied data
+        /// </summary>
+        /// <param name="userName">Username of new user</param>
+        /// <param name="hash">Computed password hash</param>
+        /// <param name="salt">password salt</param>
+        /// <returns>UserId of new user, -1 if failed.</returns>
+        private static int InsertUserInDatabase(string userName, string hash, string salt)
+        {
+            int userId = -1;
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+
+            try
+            {
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                myCommand.CommandText = "insertuser";
+
+                SqlParameter paramUserName = new SqlParameter("@username", System.Data.SqlDbType.VarChar);
+                paramUserName.Value = userName;
+                paramUserName.Size = 100;
+                myCommand.Parameters.Add(paramUserName);
+
+
+
+                SqlParameter paramHash = new SqlParameter("@pwhash", System.Data.SqlDbType.VarChar);
+                //paramHash.Direction = System.Data.ParameterDirection.Output;
+                paramHash.Value = hash;
+                paramHash.Size = 100;
+                myCommand.Parameters.Add(paramHash);
+
+                SqlParameter paramSalt = new SqlParameter("@pwsalt", System.Data.SqlDbType.VarChar);
+                //paramSalt.Direction = System.Data.ParameterDirection.Output;
+                paramSalt.Value = salt;
+                paramSalt.Size = 20;
+                myCommand.Parameters.Add(paramSalt);
+
+                SqlParameter paramUserId = new SqlParameter("@userid", System.Data.SqlDbType.Int);
+                paramUserId.Direction = System.Data.ParameterDirection.Output;
+                myCommand.Parameters.Add(paramUserId);
+
+                myConnection.Open();
+                int numberofrows = myCommand.ExecuteNonQuery();
+
+                //Console.WriteLine($"Added {numberofrows} rows.");
+                //salt = (string)paramSalt.Value;
+                //hash = (string)paramHash.Value;
                 userId = (int)paramUserId.Value;
             }
             catch (Exception e)
@@ -120,57 +234,66 @@ namespace SqlHandler
                 myConnection.Close();
             }
 
-            Console.WriteLine($"Hash: {hash}");
-            Console.WriteLine($"Salt: {salt}");
-            Console.WriteLine($"UserId: {userId}");
-
-            //Todo: compute hash from input password.
-            string ComputedHash = "";
-            //compare and return
-            if (ComputedHash.Equals(hash))
-                return userId;
-            else
-                return -1;
+            return userId;
         }
-        /// <summary>
-        /// Creates a new user, returns user object if successful else null
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="Password"></param>
-        /// <param name="isAdmin"></param>
-        /// <returns></returns>
-        public static User CreateUser(string userName, string Password, bool isAdmin)
-        {
-            throw new NotImplementedException();
-            User user = null;
-            //check that username does not already exist.
 
-            char[] salt = new char[lengthOfSalt];
-            for (int i = 0; i < lengthOfSalt; i++)
-            {
-                salt[i] = (char)random.Next(65, 91);
-            }
-            var md5 = new System.Security.Cryptography.MD5Cng();
-            //md5.ComputeHash(salt + Password + salt);
-            //md5.ComputeHash()
-
-
-
-            bool success = false;
-
-            return user;
-        }
         /// <summary>
         /// Takes a User object referring to a already existing user, makes required changes in database
+        /// Does not touch orders.
         /// </summary>
         /// <param name="user"></param>
         /// <returns>A bool indicating if the changes succeeded.</returns>
         public static bool UpdateUser(User user)
         {
-            throw new NotImplementedException();
             //Require password too?
             bool success = false;
 
+            SqlConnection myConnection = new SqlConnection(CON_STR);
+
+            try
+            {
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                myCommand.CommandText = "updateuser";                
+                
+                SqlParameter paramFirstName = new SqlParameter("@firstname", System.Data.SqlDbType.VarChar);
+                paramFirstName.Value = user.FirstName;
+                paramFirstName.Size = 100;
+                myCommand.Parameters.Add(paramFirstName);
+
+                SqlParameter paramLastName = new SqlParameter("@lastname", System.Data.SqlDbType.VarChar);
+                paramLastName.Value = user.LastName;
+                paramLastName.Size = 100;
+                myCommand.Parameters.Add(paramLastName);
+
+                SqlParameter paramEmail = new SqlParameter("@email", System.Data.SqlDbType.VarChar);
+                paramEmail.Value = user.EmailAddress;
+                paramEmail.Size = 100;
+                myCommand.Parameters.Add(paramEmail);
+
+                SqlParameter paramAddress = new SqlParameter("@address", System.Data.SqlDbType.VarChar);
+                paramAddress.Value = user.DeliveryAddress;
+                paramAddress.Size = 100;
+                myCommand.Parameters.Add(paramAddress);
+
+                SqlParameter paramID = new SqlParameter("@userid", System.Data.SqlDbType.Int);
+                paramID.Value = user.UserId;
+                myCommand.Parameters.Add(paramID);
+
+                myConnection.Open();
+                int numberofrows = myCommand.ExecuteNonQuery();
+                success = true;
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                myConnection.Close();
+            }
+            
             return success;
         }
         /// <summary>
@@ -178,7 +301,6 @@ namespace SqlHandler
         /// </summary>
         public static List<Product> GetProducts()
         {
-            //Todo: test GetProducts()
             List<Product> products = new List<Product>();
 
             SqlConnection myConnection = new SqlConnection(CON_STR);
@@ -203,7 +325,7 @@ namespace SqlHandler
                     if (!(myReader["ThumbnailPictureUrl"] is System.DBNull))
                         product.ThumbnailPictureUrl = (string)myReader["ThumbnailPictureUrl"];
                     if (!(myReader["Cost"] is System.DBNull))
-                        product.Cost = (double)myReader["Cost"];
+                        product.Cost = (decimal)myReader["Cost"];
 
                     products.Add(product);
                 }

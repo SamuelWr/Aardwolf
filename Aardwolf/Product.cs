@@ -13,7 +13,7 @@ namespace Aardwolf
         public string Description { get; set; }
         public string PictureUrl { get; set; }
         public string ThumbnailPictureUrl { get; set; }
-        public double Cost { get; set; }
+        public decimal Cost { get; set; }
         
     }
 }
