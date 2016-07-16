@@ -99,3 +99,7 @@
 .glyphicon {
     margin-right: 10px;
 }
+
+.pagination {
+    text-align: center;
+}
