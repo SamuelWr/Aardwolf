@@ -15,7 +15,7 @@
                     <form class="form-signin">
                         <input type="text" class="form-control" placeholder="Email" />
                         <input type="password" class="form-control" placeholder="Password" />
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Sign in"></asp:Button>
                     </form>
                 </div>
                 <a href="register.aspx" class="text-center new-account">Create an account </a>

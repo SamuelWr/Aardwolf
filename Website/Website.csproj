@@ -99,6 +99,7 @@
     <Content Include="login.aspx" />
     <Content Include="packages.config" />
     <Content Include="register.aspx" />
+    <Content Include="registersuccess.aspx" />
     <Content Include="scripts\jquery-1.9.1.min.map" />
     <Content Include="ClassDiagram1.cd" />
     <None Include="Web.Debug.config">
@@ -173,6 +174,13 @@
     </Compile>
     <Compile Include="register.aspx.designer.cs">
       <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="registersuccess.aspx.cs">
+      <DependentUpon>registersuccess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="registersuccess.aspx.designer.cs">
+      <DependentUpon>registersuccess.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

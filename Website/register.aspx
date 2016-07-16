@@ -11,7 +11,7 @@
             <div class="col-sm-6 col-md-4 col-md-offset-4">
                 <h1 class="text-center login-title">Create an account</h1>
                 <div class="account-wall">
-                    <form class="form-signin">
+                    <form runat="server" action="register.aspx" method="post" class="form-signin">
 
                         <label class="control-label" for="username">Username</label>
                         <input type="text" id="username" name="username" placeholder="" class="form-control" />
@@ -29,7 +29,7 @@
                         <input type="password" id="password_confirm" name="password_confirm" placeholder="" class="form-control" />
 
                         <p class="help-block">Please confirm password</p>
-                        <button class="btn btn-lg btn-primary btn-block">Register</button>
+                        <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" Text="Register"></asp:Button>
 
                     </form>
                 </div>
