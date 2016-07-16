@@ -312,7 +312,12 @@ namespace SqlHandler
         /// <param name="Password"></param>
         /// <param name="isAdmin"></param>
         /// <returns>User object representing the new user.</returns>
-        public static User CreateUser(string userName, string Password, bool isAdmin)
+        
+        // Ändrade metoden till en bool då jag bara vill ha info om registreringen lyckades eller ej,
+        // eller hade du någon annan tanke på användning av att returnera en user? La även till att
+        // standard för isAdmin är false så slipper jag skicka med den som en parameter varje gång
+        // eftersom vi bara kommer skapa admins direkt i databasen /Viktor
+        public static bool CreateUser(string userName, string Password, bool isAdmin = false)
         {
             //todo: check that username does not already exist.
 
@@ -332,9 +337,9 @@ namespace SqlHandler
 
             //return user if insert completed.
             if (user.UserId > 0)
-                return user;
+                return true;
             else
-                return null;
+                return false;
         }
         /// <summary>
         /// Creates a new user in database with supplied data
