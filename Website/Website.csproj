@@ -97,6 +97,7 @@
     <Content Include="Basket.aspx" />
     <Content Include="Content\style.css" />
     <Content Include="login.aspx" />
+    <Content Include="loginsuccessful.aspx" />
     <Content Include="packages.config" />
     <Content Include="register.aspx" />
     <Content Include="registersuccess.aspx" />
@@ -166,6 +167,13 @@
     </Compile>
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="loginsuccessful.aspx.cs">
+      <DependentUpon>loginsuccessful.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="loginsuccessful.aspx.designer.cs">
+      <DependentUpon>loginsuccessful.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="register.aspx.cs">
