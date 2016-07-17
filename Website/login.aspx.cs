@@ -19,7 +19,8 @@ namespace Website
                 string pword = Request.Form["password"];
                 if (Sql.LogIn(username, pword) > 0)
                 {
-                    Response.Redirect("registersuccess.aspx");
+                    Response.Redirect("myaccount.aspx");
+                    Session["login"] = 1; 
                 }
             }
         }

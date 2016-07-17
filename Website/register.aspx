@@ -4,11 +4,11 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="server">
 
-    <%--TODO: Centrera registreringsform vertikalt. Gör den responsiv i md-läge--%>
+    <%--TODO: Centrera registreringsform vertikalt.--%>
 
     <div class="container">
         <div class="row vertical-center">
-            <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
                 <h1 class="text-center login-title">Create an account</h1>
                 <div class="account-wall">
                     <form runat="server" action="register.aspx" method="post" class="form-signin">
