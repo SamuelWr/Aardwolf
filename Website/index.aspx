@@ -10,78 +10,7 @@
     <div class="container index">
         <div class="row products">
             <form runat="server">
-                <div class="col-sm-3 product">
-                    <h3>Column 1</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 2</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 3</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 4</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3">
-                    <h3>Column 1</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 2</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 3</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
-                <div class="col-sm-3 product">
-                    <h3>Column 4</h3>
-                    <div class="thumbnail">
-                        <img src="http://img3.wikia.nocookie.net/__cb20140916184402/pokemon/images/8/85/007Squirtle_Dream.png" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                    <asp:Button runat="server" class="btn btn-lg btn-primary btn-block" type="submit" Text="Add to cart" />
-                </div>
+                <asp:Literal ID="LiteralProducts" runat="server"></asp:Literal>
             </form>
         </div>
         <div class="row">
