@@ -11,7 +11,15 @@ namespace Website
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // TODO: skydda sida
+            string html = "";
+            if (Session["login"] != null && (int)Session["login"] > 0)
+            {
+                html = "<meta http-equiv=\"Refresh\"content=\"5;url=basket.aspx/\"/>";
+            }
+            else
+                html = "<h1>Login successful! Redirecting</h1>";
+
+            LoginLiteral.Text = html;
         }
     }
 }

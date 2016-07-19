@@ -2,6 +2,5 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="server">
-    <h1>Login successful! Redirecting</h1>
-    <meta http-equiv="Refresh" content="5;url=basket.aspx" />
+    <asp:Literal ID="LoginLiteral" runat="server"></asp:Literal>
 </asp:Content>
