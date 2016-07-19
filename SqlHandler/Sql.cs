@@ -271,9 +271,9 @@ namespace SqlHandler
 
                 //Console.WriteLine($"Added {numberofrows} rows.");
 
-                //salt = (string)paramSalt.Value;
-                //hash = (string)paramHash.Value;
-                //userId = (int)paramUserId.Value;
+                salt = (string)paramSalt.Value;
+                hash = (string)paramHash.Value;
+                userId = (int)paramUserId.Value;
             }
             catch (Exception e)
             {
