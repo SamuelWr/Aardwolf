@@ -139,6 +139,7 @@
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\jquery-1.9.1.js" />
     <Content Include="scripts\jquery-1.9.1.min.js" />
+    <Content Include="addproduct.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,13 @@
     </Compile>
     <Compile Include="registersuccess.aspx.designer.cs">
       <DependentUpon>registersuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="addproduct.aspx.cs">
+      <DependentUpon>addproduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="addproduct.aspx.designer.cs">
+      <DependentUpon>addproduct.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
