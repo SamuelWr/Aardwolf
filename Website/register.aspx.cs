@@ -23,7 +23,8 @@ namespace Website
                 int userId = Sql.CreateUser(username, pword);
                 if (userId > 0)
                 {
-                    //Todo: log in user? How do we do that? Session["user"]=userID?
+                    //Todo: log in user here?
+                    //Session["ID"] = userID;
                     Response.Redirect("registersuccess.aspx");
                 }
             }

@@ -29,6 +29,8 @@ namespace Website
             html += $"<td>{currentUser.LastName}</td>";
             html += $"<td>{currentUser.DeliveryAddress}</td>";
             html += $"<td>{currentUser.EmailAddress}</td></tr></tbody>";
+
+            LiteralUserinfo.Text = html;
         }
     }
 }

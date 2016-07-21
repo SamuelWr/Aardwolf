@@ -14,7 +14,7 @@ namespace Website
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["login"] = -1;
+            //Session["login"] = -1;
 
             //display products on page
             StringBuilder productsTable = new StringBuilder();

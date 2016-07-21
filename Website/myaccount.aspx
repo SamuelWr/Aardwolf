@@ -16,6 +16,9 @@
                         <th>Email</th>
                     </tr>
                 </thead>
+
+                <asp:Literal ID="LiteralUserinfo" runat="server"></asp:Literal>
+
             </table>
         </div>
     </div>

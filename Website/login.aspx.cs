@@ -17,10 +17,13 @@ namespace Website
             {
                 string username = Request.Form["username"];
                 string pword = Request.Form["password"];
-                if (Sql.LogIn(username, pword) > 0)
+
+                int userId = Sql.LogIn(username, pword);
+                if (userId > 0)
                 {
+                    Session["login"] = 1;
+                    Session["ID"] = userId;
                     Response.Redirect("myaccount.aspx");
-                    Session["login"] = 1; 
                 }
             }
         }
