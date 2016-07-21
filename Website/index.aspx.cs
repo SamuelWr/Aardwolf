@@ -16,6 +16,7 @@ namespace Website
         {
             Session["login"] = -1;
 
+            //display products on page
             StringBuilder productsTable = new StringBuilder();
             var products = Sql.GetProducts();
             foreach (var item in products)
@@ -24,14 +25,19 @@ namespace Website
                 productsTable.Append($"<h3>{item.ProductName}</h3>");
                 productsTable.Append($"<div class=\"thumbnail\"><img src = \"{item.ThumbnailPictureUrl}\"/></div>");
                 productsTable.Append($"<p>{item.Description}</p>");
-                productsTable.Append($"<asp:Button runat = \"server\" class=\"btn btn-lg btn-primary btn-block\" type=\"submit\" Text=\"Add to cart {item.ProductId}\" />");
-                productsTable.Append("</div>");                    
+                productsTable.Append($"<a href=\"index.aspx?action=addtocart&pid={item.ProductId}\" class=\"btn btn-lg btn-primary btn-block\">Add item {item.ProductId} to cart</a>");
+                productsTable.Append("</div>");
             }
             LiteralProducts.Text = productsTable.ToString();
 
+            if (Request["action"] == "addtocart")
+            {
+                int ProductId = int.Parse(Request["pid"]);
+                //Todo: actually add product to cart here. @Viktor, hur vill vi lagra det? Session["cart"] = List<int> ?
+            }
+
             if (IsPostBack)
             {
-                //check for add product to shopping cart.
             }
         }
     }
