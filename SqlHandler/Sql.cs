@@ -45,12 +45,11 @@ namespace SqlHandler
 
         }
 
-        private static Random random = new Random();
-        private const int lengthOfSalt = 10;
-
+        
         public static void DeleteOrder(int UserId, int OrderId)
         {
             //We only really need OrderId, but having UserId for errorchecking is nice.
+            //Todo: change to stored procedure to do everything in one transaction.
             var commandString = $"SELECT * from Orders WHERE ID = {OrderId} AND CustomerID = {UserId}";
             SqlConnection myConnection = new SqlConnection(CON_STR);
             SqlCommand myCommand = new SqlCommand(commandString, myConnection);
@@ -229,12 +228,8 @@ namespace SqlHandler
         /// <returns></returns>
         public static int LogIn(string username, string password)
         {
-            //TODO: I might have a security issue here if someone crashes the database at just the right moment.
-            // then stored hash and salt is empty string.
-            //and input password might be manipulated to return empty string too.
-            //          move into try clause and return -1 if any excepton occurs to fix?
             int userId = -1;
-            string hash = "", salt = "";
+            string correctHash = "";
             //get password hash and salt from database
             SqlConnection myConnection = new SqlConnection(CON_STR);
 
@@ -250,17 +245,12 @@ namespace SqlHandler
                 paramUserName.Size = 100;
                 myCommand.Parameters.Add(paramUserName);
 
-
-
+                
                 SqlParameter paramHash = new SqlParameter("@pwhash", System.Data.SqlDbType.VarChar);
                 paramHash.Direction = System.Data.ParameterDirection.Output;
                 paramHash.Size = 100;
                 myCommand.Parameters.Add(paramHash);
-
-                SqlParameter paramSalt = new SqlParameter("@pwsalt", System.Data.SqlDbType.VarChar);
-                paramSalt.Direction = System.Data.ParameterDirection.Output;
-                paramSalt.Size = 20;
-                myCommand.Parameters.Add(paramSalt);
+                
 
                 SqlParameter paramUserId = new SqlParameter("@userid", System.Data.SqlDbType.Int);
                 paramUserId.Direction = System.Data.ParameterDirection.Output;
@@ -271,8 +261,7 @@ namespace SqlHandler
 
                 //Console.WriteLine($"Added {numberofrows} rows.");
 
-                salt = (string)paramSalt.Value;
-                hash = (string)paramHash.Value;
+                correctHash = (string)paramHash.Value;
                 userId = (int)paramUserId.Value;
             }
             catch (Exception e)
@@ -289,21 +278,14 @@ namespace SqlHandler
             //Console.WriteLine($"UserId: {userId}");
 
             //compute hash from input password.
-            string ComputedHash = ComputeHash(password, salt);
             //compare and return
-            if (hash.Equals(ComputedHash))
+            if (Hashing.ValidatePassword(password, correctHash))
                 return userId;
             else
                 return -1;
         }
 
-        private static string ComputeHash(string password, string salt)
-        {
-            //Todo: only thing left to get secure log ins (I hope...)
-            return "HashHere";
 
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Creates a new user, returns user object if successful else null
@@ -312,7 +294,7 @@ namespace SqlHandler
         /// <param name="Password"></param>
         /// <param name="isAdmin"></param>
         /// <returns>User object representing the new user.</returns>
-        
+
         // Ändrade metoden till en bool då jag bara vill ha info om registreringen lyckades eller ej,
         // eller hade du någon annan tanke på användning av att returnera en user? La även till att
         // standard för isAdmin är false så slipper jag skicka med den som en parameter varje gång
@@ -322,18 +304,12 @@ namespace SqlHandler
             //todo: check that username does not already exist.
 
             //compute hash
-            char[] saltArray = new char[lengthOfSalt];
-            for (int i = 0; i < lengthOfSalt; i++)
-            {
-                saltArray[i] = (char)random.Next(65, 91);
-            }
-            var salt = new string(saltArray);
 
-            string hash = ComputeHash(Password, salt);
-
+            //string salt = Hashing.GenerateSalt();
+            string hash = Hashing.CreateHash(Password);
             //Insert user in database
             var user = new User(userName);
-            user.UserId = InsertUserInDatabase(userName, isAdmin, hash, salt);
+            user.UserId = InsertUserInDatabase(userName, isAdmin, hash);
 
             //return user if insert completed.
             if (user.UserId > 0)
@@ -348,7 +324,7 @@ namespace SqlHandler
         /// <param name="hash">Computed password hash</param>
         /// <param name="salt">password salt</param>
         /// <returns>UserId of new user, -1 if failed.</returns>
-        private static int InsertUserInDatabase(string userName,bool isAdmin, string hash, string salt)
+        private static int InsertUserInDatabase(string userName, bool isAdmin, string hash)
         {
             int userId = -1;
             SqlConnection myConnection = new SqlConnection(CON_STR);
@@ -366,23 +342,14 @@ namespace SqlHandler
                 myCommand.Parameters.Add(paramUserName);
 
 
-
                 SqlParameter paramHash = new SqlParameter("@pwhash", System.Data.SqlDbType.VarChar);
-                //paramHash.Direction = System.Data.ParameterDirection.Output;
                 paramHash.Value = hash;
                 paramHash.Size = 100;
                 myCommand.Parameters.Add(paramHash);
 
-                SqlParameter paramSalt = new SqlParameter("@pwsalt", System.Data.SqlDbType.VarChar);
-                //paramSalt.Direction = System.Data.ParameterDirection.Output;
-                paramSalt.Value = salt;
-                paramSalt.Size = 20;
-                myCommand.Parameters.Add(paramSalt);
-
+                
                 SqlParameter paramIsAdmin = new SqlParameter("@isadmin", System.Data.SqlDbType.Bit);
-                //paramSalt.Direction = System.Data.ParameterDirection.Output;
                 paramIsAdmin.Value = isAdmin;
-                //paramSalt.Size = 20;
                 myCommand.Parameters.Add(paramIsAdmin);
 
 
@@ -394,7 +361,6 @@ namespace SqlHandler
                 int numberofrows = myCommand.ExecuteNonQuery();
 
                 //Console.WriteLine($"Added {numberofrows} rows.");
-                //salt = (string)paramSalt.Value;
                 //hash = (string)paramHash.Value;
                 userId = (int)paramUserId.Value;
             }
