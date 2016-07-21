@@ -19,8 +19,11 @@ namespace Website
                 string pword = Request["password"];
                 string email = Request["email"];
                 string address = Request["address"];
-                if (Sql.CreateUser(username, pword))
+
+                int userId = Sql.CreateUser(username, pword);
+                if (userId > 0)
                 {
+                    //Todo: log in user? How do we do that? Session["user"]=userID?
                     Response.Redirect("registersuccess.aspx");
                 }
             }

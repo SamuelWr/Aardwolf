@@ -299,7 +299,7 @@ namespace SqlHandler
         // eller hade du någon annan tanke på användning av att returnera en user? La även till att
         // standard för isAdmin är false så slipper jag skicka med den som en parameter varje gång
         // eftersom vi bara kommer skapa admins direkt i databasen /Viktor
-        public static bool CreateUser(string userName, string Password, bool isAdmin = false)
+        public static int CreateUser(string userName, string Password, bool isAdmin = false)
         {
             //todo: check that username does not already exist.
 
@@ -312,10 +312,7 @@ namespace SqlHandler
             user.UserId = InsertUserInDatabase(userName, isAdmin, hash);
 
             //return user if insert completed.
-            if (user.UserId > 0)
-                return true;
-            else
-                return false;
+            return user.UserId;
         }
         /// <summary>
         /// Creates a new user in database with supplied data
